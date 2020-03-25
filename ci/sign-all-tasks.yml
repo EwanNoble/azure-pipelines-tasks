@@ -9,10 +9,11 @@ steps:
       Badly configured build; an expected parameter is missing. //
       layoutRoot: ${{ parameters.layoutRoot }}
 - script: mkdir ${{ parameters.layoutRoot }}\_signedTasks
+  displayName: Create _signedTasks folder
 
 # TODO loop over all tasks if taskFolder is not set
 - script: echo ^<?xml version="1.0" encoding="utf-8"?^>^<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"^>^<metadata^>^<id^>CmdLineV2^</id^>^<version^>0.0.0^</version^>^<authors^>Microsoft^</authors^>^<copyright^>© Microsoft Corporation. All rights reserved.^</copyright^>^</metadata^>^</package^> > ${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}\task.nuspec
-- script: dir ${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}
+  displayName: Create ${{ parameters.taskFolder }}\task.nuspec
 - task: ArchiveFiles@2
   inputs:
      rootFolderOrFile: '${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}'
@@ -20,7 +21,10 @@ steps:
      archiveType: zip
      archiveFile: '${{ parameters.layoutRoot }}\_signedTasks\${{ parameters.taskFolder }}.nupkg'
      replaceExistingArchive: true
+  displayName: Create zip file _signedTasks\${{ parameters.taskFolder }}.nupkg
 # END LOOP
+- script: dir ${{ parameters.layoutRoot }}\_signedTasks
+  displayName: dir _signedTasks (before)
 
 - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@1
   inputs:
@@ -45,3 +49,6 @@ steps:
       }
       ]
   displayName: Sign Task Nuget Packages
+
+  - script: dir ${{ parameters.layoutRoot }}\_signedTasks
+  displayName: dir _signedTasks (after)
