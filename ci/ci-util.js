@@ -353,7 +353,7 @@ exports.getRefs = getRefs;
 var compressFolder = function (sourceFolder, targetFilePath) {
     assert(sourceFolder, 'sourceFolder');
     assert(targetFilePath, 'targetFilePath');
-    run(`powershell.exe -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command { [System.IO.Compression.ZipFile]::CreateFromDirectory('${sourceFolder}', '${targetFilePath}') }`, /*inheritStreams:*/true);
+    run(`powershell.exe -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "Add-Type -Assembly 'System.IO.Compression.FileSystem'; [System.IO.Compression.ZipFile]::CreateFromDirectory('${sourceFolder}', '${targetFilePath}') "`, /*inheritStreams:*/true);
 }
 exports.compressFolder = compressFolder;
 
