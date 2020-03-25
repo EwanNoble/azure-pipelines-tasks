@@ -12,7 +12,7 @@ steps:
   displayName: Create _signedTasks folder
 
 # loop over all tasks and create nupkgs
-- script: node prepare-tasks-for-signing.js
+- script: node ./ci/prepare-tasks-for-signing.js
   displayName: Prepare tasks for signing
   condition: ne(variables['numTasks'], 0)
 
