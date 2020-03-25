@@ -44,11 +44,11 @@ steps:
   displayName: Verify all min agent demands are valid
 
 # TODO remove -- setting task_pattern directly
-- script: echo "##vso[task.setVariable variable=task_pattern]@(DeleteFilesV1)"
-- script: echo "##vso[task.setVariable variable=numTasks]1"
+- script: echo "##vso[task.setVariable variable=task_pattern]@(ChefV1|DeleteFilesV1)"
+- script: echo "##vso[task.setVariable variable=numTasks]2"
 
 # Build
-- script: node make.js build --task DeleteFilesV1
+- script: node make.js build --task "$(task_pattern)"
   displayName: Build
   condition: ne(variables['numTasks'], 0)
 
@@ -59,7 +59,7 @@ steps:
   - template: sign-all-tasks.yml
     parameters:
       layoutRoot: $(Build.SourcesDirectory)\_build
-      taskFolder: DeleteFilesV1
+      taskFolders: "$(task_pattern)"
 
   # Stage packages
   - script: node ./ci/stage-package.js

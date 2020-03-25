@@ -1,6 +1,6 @@
 parameters:
   layoutRoot: ''
-  taskFolder: ''
+  taskFolders: ''
 
 steps:
 # Guard against missing parameters
@@ -11,18 +11,11 @@ steps:
 - script: mkdir ${{ parameters.layoutRoot }}\_signedTasks
   displayName: Create _signedTasks folder
 
-# TODO loop over all tasks if taskFolder is not set
-- script: echo ^<?xml version="1.0" encoding="utf-8"?^>^<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"^>^<metadata^>^<id^>CmdLineV2^</id^>^<version^>0.0.0^</version^>^<authors^>Microsoft^</authors^>^<copyright^>© Microsoft Corporation. All rights reserved.^</copyright^>^</metadata^>^</package^> > ${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}\task.nuspec
-  displayName: Create ${{ parameters.taskFolder }}\task.nuspec
-- task: ArchiveFiles@2
-  inputs:
-     rootFolderOrFile: '${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}'
-     includeRootFolder: false
-     archiveType: zip
-     archiveFile: '${{ parameters.layoutRoot }}\_signedTasks\${{ parameters.taskFolder }}.nupkg'
-     replaceExistingArchive: true
-  displayName: Create zip file _signedTasks\${{ parameters.taskFolder }}.nupkg
-# END LOOP
+# loop over all tasks and create nupkgs
+- script: node prepare-tasks-for-signing.js
+  displayName: Prepare tasks for signing
+  condition: ne(variables['numTasks'], 0)
+
 - script: dir ${{ parameters.layoutRoot }}\_signedTasks
   displayName: dir _signedTasks (before)
 

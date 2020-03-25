@@ -119,19 +119,18 @@ exports.run = run;
 // layout functions
 //------------------------------------------------------------------------------
 
-var initializePackagePath = function () {
-    assert(packagePath, 'packagePath');
+var createNewPath = function (newPath) {
     if (process.platform != 'win32') {
-        throw new Error(`Function 'initializePackagePath' not supported on platform '${process.platform}'.`);
+        throw new Error(`Function 'createNewPath' not supported on platform '${process.platform}'.`);
     }
 
-    var lstats = lstatOrNullSync(packagePath);
+    var lstats = lstatOrNullSync(newPath);
     if (lstats) {
         var originalWorkingDirectory;
         try {
             originalWorkingDirectory = process.cwd();
-            process.chdir(path.dirname(packagePath));
-            run(`rmdir /s /q ${path.basename(packagePath)}`, /*inheritStreams:*/true);
+            process.chdir(path.dirname(newPath));
+            run(`rmdir /s /q ${path.basename(newPath)}`, /*inheritStreams:*/true);
         }
         finally {
             if (originalWorkingDirectory) {
@@ -140,7 +139,13 @@ var initializePackagePath = function () {
         }
     }
 
-    fs.mkdirSync(packagePath);
+    fs.mkdirSync(newPath);
+}
+exports.createNewPath = createNewPath;
+
+var initializePackagePath = function () {
+    assert(packagePath, 'packagePath');
+    createNewPath(packagePath);
 }
 exports.initializePackagePath = initializePackagePath;
 
@@ -344,6 +349,13 @@ var getRefs = function () {
     return info;
 }
 exports.getRefs = getRefs;
+
+var compressFolder = function (sourceFolder, targetFilePath) {
+    assert(sourceFolder, 'sourceFolder');
+    assert(targetFilePath, 'targetFilePath');
+    run(`powershell.exe -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "& [System.IO.Compression.ZipFile]::CreateFromDirectory('${sourceFolder}', '${targetFilePath}')"`, /*inheritStreams:*/true);
+}
+exports.compressFolder = compressFolder;
 
 var compressTasks = function (sourceRoot, targetPath, individually) {
     assert(sourceRoot, 'sourceRoot');
