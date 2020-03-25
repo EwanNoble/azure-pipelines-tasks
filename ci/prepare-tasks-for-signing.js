@@ -3,7 +3,7 @@ var path = require('path');
 var util = require('./ci-util');
 
 var buildTasksPath = path.join(__dirname, '..', '_build', 'Tasks');
-var signingPath = path.join(__dirname, '..', '_signedTasks');
+var signingPath = path.join(__dirname, '..', '_build', '_signedTasks');
 
 // For each task that changed
 if (process.env.task_pattern) {
