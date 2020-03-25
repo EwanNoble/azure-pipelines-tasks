@@ -44,9 +44,9 @@ steps:
   displayName: Verify all min agent demands are valid
 
 # TODO remove -- setting task_pattern directly
-- script: echo "##vso[task.setVariable variable=task_pattern]@(ChefV1|DeleteFilesV1)"
-- script: echo $(task_pattern)
-- script: echo "##vso[task.setVariable variable=numTasks]2"
+- script: echo "##vso[task.setVariable variable=task_pattern]@(ChefV1|DeleteFilesV1)
+- script: echo "$(task_pattern)"
+- script: echo "##vso[task.setVariable variable=numTasks]2
 - script: echo $(numTasks)
 
 # Build
