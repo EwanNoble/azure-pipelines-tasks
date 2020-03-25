@@ -12,6 +12,8 @@ steps:
 
 # TODO loop over all tasks if taskFolder is not set
 - script: echo ^<?xml version="1.0" encoding="utf-8"?^>^<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"^>^<metadata^>^<id^>CmdLineV2^</id^>^<version^>0.0.0^</version^>^<authors^>Microsoft^</authors^>^<copyright^>© Microsoft Corporation. All rights reserved.^</copyright^>^</metadata^>^</package^> > ${{ parameters.layoutRoot }}\Tasks\Task.nuspec
+- script: dir ${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}
+- script: type ${{ parameters.layoutRoot }}\Tasks\Task.nuspec
 - task: ArchiveFiles@2
   inputs:
      rootFolderOrFile: '${{ parameters.layoutRoot }}\Tasks\${{ parameters.taskFolder }}'
@@ -25,7 +27,7 @@ steps:
   inputs:
     ConnectedServiceName: AzurePipelinesTasksESRP
     FolderPath: '${{ parameters.layoutRoot }}\_signedTasks'
-    Pattern: '*.nupkg'
+    Pattern: '*.nupkg1'
     signConfigType: inlineSignParams
     inlineOperation: |
       [{
