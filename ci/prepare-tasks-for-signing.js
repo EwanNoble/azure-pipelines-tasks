@@ -26,7 +26,7 @@ if (process.env.task_pattern) {
         const nuspec = `<?xml version="1.0" encoding="utf-8"?><package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"><metadata><id>${taskFolders[i]}</id><version>0.0.0</version><authors>Microsoft</authors><copyright>© Microsoft Corporation. All rights reserved.</copyright></metadata></package>`
         fs.writeFileSync(nuspecFilePath, nuspec);
 
-        const nupkg = path.join(signingPath, taskFolder + ".nupkg");
+        const nupkg = path.join(signingPath, taskFolders[i] + ".nupkg");
         util.compressFolder(taskFolder, nupkg);
     }
 }
