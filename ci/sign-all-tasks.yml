@@ -50,5 +50,5 @@ steps:
       ]
   displayName: Sign Task Nuget Packages
 
-  - script: dir ${{ parameters.layoutRoot }}\_signedTasks
+- script: dir ${{ parameters.layoutRoot }}\_signedTasks
   displayName: dir _signedTasks (after)
