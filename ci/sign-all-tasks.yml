@@ -8,15 +8,13 @@ steps:
   - |
       Badly configured build; an expected parameter is missing. //
       layoutRoot: ${{ parameters.layoutRoot }}
-- script: mkdir ${{ parameters.layoutRoot }}\_signedTasks
-  displayName: Create _signedTasks folder
 
 # loop over all tasks and create nupkgs
 - script: node ./ci/prepare-tasks-for-signing.js
   displayName: Prepare tasks for signing
   condition: ne(variables['numTasks'], 0)
 
-- script: dir ${{ parameters.layoutRoot }}\..\_signedTasks
+- script: dir ${{ parameters.layoutRoot }}\_signedTasks
   displayName: dir _signedTasks (before)
 
 - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@1
@@ -43,5 +41,5 @@ steps:
       ]
   displayName: Sign Task Nuget Packages
 
-- script: dir ${{ parameters.layoutRoot }}\..\_signedTasks
+- script: dir ${{ parameters.layoutRoot }}\_signedTasks
   displayName: dir _signedTasks (after)
